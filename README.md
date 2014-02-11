@@ -1,5 +1,7 @@
 #Event Extender 5
 
+Texte d'introduction
+
 ##Installation
 
 ###En version BETA
