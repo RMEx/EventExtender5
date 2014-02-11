@@ -1662,7 +1662,7 @@ module Kernel
   RGSSHWND      = Win32API::FindWindow.('RGSS Player', 0)
   USERNAME      = ENV['USERNAME'].dup.to_utf8
   Clipboard     = UI::Clipboard
-  FORMAT        = Clipboard.get_format("VX Ace COMMAND")
+  FORMAT        = Clipboard.get_format("VX Ace EVENT_COMMAND")
   Keyboard      = UI::Keyboard.new
   Mouse         = UI::Mouse.new
   #--------------------------------------------------------------------------
