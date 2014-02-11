@@ -476,9 +476,11 @@ class Scene_Tables < Scene_Base
   #--------------------------------------------------------------------------
   def update
     super
-    update_drop
-    update_add
-    update_entries
+    if Database.tables.length > 0
+      update_drop
+      update_add
+      update_entries  
+    end 
     @viewport.update
     if Keyboard.any?(:trigger?, :esc, Configuration::KEY_DATABASE)
       $game_system.menu_disabled = $game_temp.menu_disabled
