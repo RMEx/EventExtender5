@@ -1,4 +1,3 @@
 #Event Extender 5
-DÃ©pot de source (et documentation) officielle du projet.
-
-##Informations
+Pages relative à l'Event Extender
+*  [Installation en BETA de l'Event Extender 5](https://github.com/nukiFW/EventExtender5/wiki/Installation-en-BETA)
