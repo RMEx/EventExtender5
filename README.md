@@ -21,6 +21,7 @@ L'Event Extender est le fruit du travail d'une équipe entière, voici une liste (
 *   Chaos17 pour ses suggestions et ses bugs signalés
 *   Ulis pour son énorme travail de relecture pour la version 4
 *   Lidenvice pour son aide sur l'ergonomie et ses suggestions (et son implication)
+*   Lightnox aide et motivation
 
 ##### Mais aussi 
 Magi, Al Rind, Testament, S4suk3, Tonyryu, Siegfried, Berka, Nagato Yuki, Raymo, Ypsoriama, Amalrich Von Monesser, Magic, Strall, 2cri, TI-MAX, Playm, Kmkzy, Kriss, Scriptopathe, Zouzouka, Yuko
