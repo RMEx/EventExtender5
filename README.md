@@ -9,4 +9,5 @@ Texte d'introduction
 
 ##Composantes
 *  [Testeur de teintes inGame](https://github.com/nukiFW/EventExtender5/wiki/Le-testeur-de-teintes-Ingame)
+*  [Testeur de script inGame](https://github.com/nukiFW/EventExtender5/wiki/Le-testeur-de-scripts-Ingame)
 *  [Présentation de la base de données extensible](https://github.com/nukiFW/EventExtender5/wiki/Base-de-donn%C3%A9es-extensible)
