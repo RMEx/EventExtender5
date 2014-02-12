@@ -1,5 +1,9 @@
 #Event Extender 5
 
+#### Un outil pour étendre RPG Maker VXAce
+L'Event Extender 5 est un outil pour étendre les fonctionnalités proposés par RPG Maker VXAce au moyen de commandes (et d'outils un peu plus graphiques) pour rendre la conception d'un jeu plus aisée (et offrir plus de fonctionnalités natives).  
+Il permet de gagner du temps en automatisant certaines tâches récurrentes et ennuyeuse mais aussi d'aller beaucoup plus loins avec des fonctionnalités inédites.
+
 #### Contributeurs 
 L'Event Extender est le fruit du travail d'une équipe entière, voici une liste (que nous voudrions exhaustive) des contributeurs
 
