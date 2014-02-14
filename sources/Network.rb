@@ -177,6 +177,7 @@ class Socket
   # * Connect
   #--------------------------------------------------------------------------
   def connect(host, port)
+    host = (host == "localhost") ? "127.0.0.1" : host
     if make_connection(port, host)
       @connected = true
       return
