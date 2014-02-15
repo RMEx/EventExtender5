@@ -18,18 +18,18 @@ module HTTP
   #--------------------------------------------------------------------------
   # * Constants
   #--------------------------------------------------------------------------
-  USER_AGENT    = "ENTERBRAIN/VXACE(EVENTEXTENDER)"
-  PROXY_NAME    = "WINHTTP_NO_PROXY_NAME"
-  PROXY_BYPASS  = "WINHTTP_NO_PROXY_BYPASS"
+  USER_AGENT    = "ENTERBRAIN/VXACE(EVENTEXTENDER)".lpcwstr
+  PROXY_NAME    = "WINHTTP_NO_PROXY_NAME".lpcwstr
+  PROXY_BYPASS  = "WINHTTP_NO_PROXY_BYPASS".lpcwstr
 
-  OPTIONS = "OPTIONS".to_ascii
-  GET     = "GET".to_ascii
-  HEAD    = "HEAD".to_ascii
-  POST    = "POST".to_ascii
-  PUT     = "PUT".to_ascii
-  DELETE  = "DELETE".to_ascii
-  TRACE   = "TRACE".to_ascii
-  CONNECT = "CONNECT".to_ascii
+  OPTIONS = "OPTIONS".lpcwstr
+  GET     = "GET".lpcwstr
+  HEAD    = "HEAD".lpcwstr
+  POST    = "POST".lpcwstr
+  PUT     = "PUT".lpcwstr
+  DELETE  = "DELETE".lpcwstr
+  TRACE   = "TRACE".lpcwstr
+  CONNECT = "CONNECT".lpcwstr
 
   WinHttpOpen               = Win32API.new('winhttp','WinHttpOpen',"pippi",'i')
   WinHttpConnect            = Win32API.new('winhttp','WinHttpConnect',"ppii",'i')
@@ -39,11 +39,25 @@ module HTTP
   WinHttpQueryDataAvailable = Win32API.new('winhttp','WinHttpQueryDataAvailable', "pi", "i")
   WinHttpReadData           = Win32API.new('winhttp','WinHttpReadData',"ppip",'i')
   WinHttpCloseHandle        = Win32API.new('winhttp','WinHttpCloseHandle',"p",'i')
+  URLDownloadToFile         = Win32API.new("urlmon", "URLDownloadToFile", "lppll", "l")
+
+  class << self
+    #--------------------------------------------------------------------------
+    # * Download file
+    #--------------------------------------------------------------------------
+    def download(url, name)
+      res = URLDownloadToFile.call(0, url, name, 0, 0)
+      res == 0
+    end
+
+  end
 
   #==============================================================================
   # ** Request
   #------------------------------------------------------------------------------
   # Http Request Interface
+
+  # Always underconstruction
   #==============================================================================
 
   class Request
@@ -67,14 +81,14 @@ module HTTP
     # * HTTP Connection
     #--------------------------------------------------------------------------
     def connect(host, port = 80)
-      @connection = WinHttpConnect.call(@hinternet, host.to_ascii, port, 0)
+      @connection = WinHttpConnect.call(@hinternet, host.lpcwstr, port, 0)
       raise RuntimeError.new("Request connection failed") unless @connection
     end
     #--------------------------------------------------------------------------
     # * Open request
     #--------------------------------------------------------------------------
     def open_request(method, path)
-      @request = WinHttpOpenRequest.call(@connection, method, path.to_ascii, nil, nil, 0, 0)
+      @request = WinHttpOpenRequest.call(@connection, method, path.lpcwstr, nil, nil, 0, 0)
       raise RuntimeError.new("Request decoration failed") unless @connection
     end
     #--------------------------------------------------------------------------
@@ -91,7 +105,6 @@ module HTTP
       if WinHttpReceiveResponse.call(@request, nil)
         dwSize = 0
         if WinHttpQueryDataAvailable.call(@request, dwSize)
-          p dwSize
           buffer = [].pack("x#{dwSize+1}")
           downloaded = [0].pack('i')
           if WinHttpReadData.call(@request, buffer, dwSize, downloaded)
