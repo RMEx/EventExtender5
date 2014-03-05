@@ -203,12 +203,14 @@ module GUI
       title = Vocab.eval_ingame
       @block.bitmap =GUI::create_gui_bitmap(Graphics.width-20,46,title,0,20)
       @block.x, @block.y = 10, Graphics.height - 54
+      @block.z = 1000
     end
     #--------------------------------------------------------------------------
     # * Create Text Area
     #--------------------------------------------------------------------------
     def create_textarea
       @area = KeyField.new(14, @block.y+21, Graphics.width-158, "", 19)
+      @area.set_z(1100)
     end
     #--------------------------------------------------------------------------
     # * Create Buttons
@@ -229,6 +231,8 @@ module GUI
       @buttonB.bitmap = @buttonA.bitmap.clone
       @buttonA.bitmap.draw_text(0,0, 60, 20, Vocab.eval_run, 1)
       @buttonB.bitmap.draw_text(0,0, 60, 20, Vocab.eval_make, 1)
+      @buttonA.z = 1000
+      @buttonB.z = 1000
     end
     #--------------------------------------------------------------------------
     # * visible
@@ -256,6 +260,7 @@ module GUI
       if @buttonA.rect.trigger?(:mouse_left) || Keyboard.trigger?(:enter)
         begin
           eval(@area.value, $game_map.interpreter.get_binding)
+          $game_map.need_refresh = true
         rescue Exception => exc
           msgbox(Vocab.eval_error + "\n" + exc.to_s)
         end
@@ -1992,6 +1997,10 @@ class Scene_Map
   def update
     extender_update
     if $TEST
+      if Keyboard.trigger?(:esc) && @eval_ingame.visible
+        $game_system.menu_disabled = @old_call_menu
+        @eval_ingame.visible = !@eval_ingame.visible
+      end
       if Keyboard.trigger?(:esc) && @tone_manager.visible && !@tone_manager.in_transfert
         $game_system.menu_disabled = @old_call_menu
         @tone_manager.visible = !@tone_manager.visible
@@ -2007,18 +2016,15 @@ class Scene_Map
       end
       if Keyboard.trigger?(Configuration::KEY_INGAME_EVAL) && !@tone_manager.visible 
         @old_call_menu = $game_system.menu_disabled
-        @eval_ingame.visible = true
-        $game_system.menu_disabled = true
-        loop do
-          Graphics.update
-          Input.update
-          @eval_ingame.update
-          break if [Configuration::KEY_INGAME_EVAL,:esc].any?{|k|Keyboard.trigger?(k)}
+        @eval_ingame.visible = !@eval_ingame.visible
+        if @eval_ingame.visible
+          $game_system.menu_disabled = true
+        else
+          $game_system.menu_disabled = @old_call_menu
         end
-        @eval_ingame.visible = false
-        $game_system.menu_disabled = @old_call_menu
       end
       @tone_manager.update
+      @eval_ingame.update
     end
   end
   #--------------------------------------------------------------------------
