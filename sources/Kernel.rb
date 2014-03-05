@@ -577,6 +577,8 @@ class Win32API
   MultiByteToWideChar       ||= self.new('kernel32', 'MultiByteToWideChar', 'ilpipi', 'i')
   OpenClipboard             ||= self.new('user32', 'OpenClipboard', 'i', 'i')
   RegisterClipboardFormat   ||= self.new('user32', 'RegisterClipboardFormat', 'p', 'i')
+  RtlMoveMemorySave         ||= self.new('kernel32','RtlMoveMemory','pii','i')
+  RtlMoveMemoryLoad         ||= self.new('kernel32','RtlMoveMemory','ipi','i')
   ScreenToClient            ||= self.new('user32', 'ScreenToClient', 'lp', 'i')
   SetClipboardData          ||= self.new('user32', 'SetClipboardData', 'ii', 'i')
   ShowCursor                ||= self.new('user32', 'ShowCursor', 'i', 'i')

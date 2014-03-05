@@ -8,6 +8,64 @@
  By Grim 
 =end
 
+
+#==============================================================================
+# ** Marshal implementations in Font & Bitmap.
+#------------------------------------------------------------------------------
+#  Writed by Yeyinde
+#  Improved by Grim (FunkyWork)
+#==============================================================================
+
+class Font
+  def marshal_dump;end
+  def marshal_load(obj);end
+end
+
+#==============================================================================
+# ** Marshal implementations in Font & Bitmap.
+#------------------------------------------------------------------------------
+#  Writed by Yeyinde
+#  Improved by Grim 
+#==============================================================================
+
+class Bitmap
+  #--------------------------------------------------------------------------
+  # * Marshall dump
+  #--------------------------------------------------------------------------
+  def _dump(limit)
+    data = "rgba"*width*height
+    Win32API::RtlMoveMemorySave.call(data,address,data.length)
+    [width,height,Zlib::Deflate.deflate(data)].pack("LLa*")
+  end
+  #--------------------------------------------------------------------------
+  # * Marshall load
+  #--------------------------------------------------------------------------
+  def self._load(str)
+    w,h,zdata = str.unpack("LLa*")
+    bitmap = new(w,h)
+    Win32API::RtlMoveMemoryLoad.call(bitmap.address,Zlib::Inflate.inflate(zdata),w*h*4)
+    return bitmap
+  end
+  #--------------------------------------------------------------------------
+  # * Give Memory Adress
+  #--------------------------------------------------------------------------
+  def address
+    buffer,ad="xxxx",object_id*2+16
+    Win32API::RtlMoveMemorySave.call(buffer,ad,4)
+    ad=buffer.unpack("L")[0]+8
+    Win32API::RtlMoveMemorySave.call(buffer,ad,4)
+    ad=buffer.unpack("L")[0]+16
+    Win32API::RtlMoveMemorySave.call(buffer,ad,4)
+    buffer.unpack("L")[0]
+  end
+  #--------------------------------------------------------------------------
+  # * Give Pointer
+  #--------------------------------------------------------------------------
+  def pointer
+    (self.__id__) << 1
+  end
+end
+
 #==============================================================================
 # ** Game_Picture
 #------------------------------------------------------------------------------
@@ -41,6 +99,8 @@ class Game_Picture
   attr_accessor  :mirror
   attr_accessor  :wave_amp
   attr_accessor  :wave_speed
+  attr_accessor  :target_x, :target_y, :target_zoom_x, :target_zoom_y
+  attr_accessor  :target_opacity
   #--------------------------------------------------------------------------
   # * Object Initialization
   #--------------------------------------------------------------------------
@@ -310,13 +370,16 @@ module GFXApi
   #--------------------------------------------------------------------------
   def picture_tone(id, *args)
     case args.length
-    when 1; tone = args[0]
+    when 1; 
+      tone = args[0]
+      duration = 0
     else
       r, g, b = args[0], args[1], args[2]
       gray = args[3] || 0
       tone = Tone.new(r, g, b, gray)
+      duration = args[3] || 0
     end
-    pictures[id].tone = tone
+    pictures[id].start_tone_change(tone, duration)
   end
   #--------------------------------------------------------------------------
   # * Change blend type
