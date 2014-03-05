@@ -1238,6 +1238,7 @@ module EventPrinter
     # * Build an event from its id and its map id
     #--------------------------------------------------------------------------
     def self.build(id_event, id_map = 0)
+      id_map = id_map == 0 ? DataManager.system.start_map_id : id_map
       map = load_data(sprintf("Data/Map%03d.rvdata2", id_map))
       event = load_data("Data/CommonEvents.rvdata2")[id_event]
       self.new(event, map)
@@ -1511,6 +1512,15 @@ class Scene_Printer_EC < Scene_Base
     SceneManager.return if Keyboard.trigger?(:esc)
     [@html, @bbcode,  @code].each do |val|
       val.opacity = (val.rect.hover?) ? 255 : 200
+      if val.rect.trigger?(:mouse_left)
+        ec = EventPrinter::CommonEvent.build(@id)
+        methd = case val 
+        when @html; :html
+        when @bbcode; :bbcode
+        end
+        Clipboard.push_text (ec.send(methd))
+        msgbox("Mis dans le presse papier")
+      end
     end
     @sprites.each do |k, v|
       if v.rect.trigger?(:mouse_left)
